@@ -1,7 +1,18 @@
+import { useState, useEffect } from "react";
 import InviteStory from "./stories/InviteStory";
 import FeedbackStory from "./stories/FeedbackStory";
 
 export default function StorySlide({ story }) {
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        // Reset loaded state when story changes
+        setLoaded(false);
+        const img = new Image();
+        img.src = story.image;
+        img.onload = () => setLoaded(true);
+    }, [story.image]);
+
     const isFirst = story.id === 0;
 
     if (story.type === "feedback") return <FeedbackStory />;
@@ -9,27 +20,33 @@ export default function StorySlide({ story }) {
 
     return (
         <div className="h-full w-full relative flex items-center justify-center overflow-hidden bg-black">
-
             {/* Top user info */}
             <div className="absolute top-4 left-4 right-4 flex items-center gap-3 z-20">
                 <img
-                src="/logo.png" // Replace with your logo path
+                src="/logo.png"
                 alt="User Logo"
                 className="w-10 h-10 rounded-full object-cover"
                 />
                 <span className="text-white font-semibold text-sm">RCCG COHG</span>
             </div>
 
-            {/* Image */}
-            <img
+            {/* Image or Spinner */}
+            {!loaded ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                {/* Spinner */}
+                <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            ) : (
+                <img
                 src={story.image}
                 alt=""
                 className={`
-                absolute inset-0 w-full h-full
-                ${story.fit === "cover" ? "object-cover" : "object-contain"}
-                ${isFirst ? "animate-zoom-in" : ""}
+                    absolute inset-0 w-full h-full
+                    ${story.fit === "cover" ? "object-cover" : "object-contain"}
+                    ${isFirst ? "animate-zoom-in" : ""}
                 `}
-            />
+                />
+            )}
 
             {isFirst && <div className="absolute inset-0 bg-black/40" />}
 
@@ -40,9 +57,7 @@ export default function StorySlide({ story }) {
                 ${isFirst ? "animate-fade-up" : ""}
                 `}
             >
-                {story.title && (
-                <h1 className="text-3xl font-bold mb-3">{story.title}</h1>
-                )}
+                {story.title && <h1 className="text-3xl font-bold mb-3">{story.title}</h1>}
                 {story.subtitle && <p className="text-lg">{story.subtitle}</p>}
             </div>
 
