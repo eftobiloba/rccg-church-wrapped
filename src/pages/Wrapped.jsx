@@ -46,7 +46,7 @@ export default function Wrapped() {
                 {/* Persistent actions */}
                 <div className="absolute bottom-4 left-0 right-0 px-4 flex gap-3 z-30 justify-center">
                     <a
-                        href="#feedback"
+                        href="https://forms.gle/SDskuXBCC5zruD3R9"
                         className="flex-1 bg-white/90 text-black py-2 rounded-full text-center text-sm font-semibold"
                     >
                         Leave Feedback
